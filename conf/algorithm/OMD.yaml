@@ -1,0 +1,4 @@
+alg_names: OMD
+defaults:
+  - MD
+  - _self_

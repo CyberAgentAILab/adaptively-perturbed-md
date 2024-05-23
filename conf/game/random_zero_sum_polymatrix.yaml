@@ -1,0 +1,4 @@
+random_zero_sum_polymatrix:
+  n_players: 3
+  n_actions: 10
+game_name: random_zero_sum_polymatrix

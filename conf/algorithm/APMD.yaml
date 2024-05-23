@@ -1,0 +1,7 @@
+alg_names: APMD
+mutation_rate: 0.1
+mutation_divergence: reverse_kl
+update_slingshot_freq: #None
+defaults:
+  - MD
+  - _self_

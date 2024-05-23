@@ -1,0 +1,4 @@
+alg_names: OFTRL
+defaults:
+  - FTRL
+  - _self_

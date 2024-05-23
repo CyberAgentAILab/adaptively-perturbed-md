@@ -1,0 +1,4 @@
+alg_names: FTRL
+random_init: false
+learning_rate: 0.1
+regularizer: entropy
