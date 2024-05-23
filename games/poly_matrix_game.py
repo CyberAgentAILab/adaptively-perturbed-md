@@ -48,54 +48,6 @@ class PolyMatrixGame(BaseGame):
         return u
 
 
-def three_matching_pennies():
-    n_players = 3
-    n_actions = [2, 2, 2]
-    utilities = np.array([
-        [[1, -1],
-         [-1, 1]],  # 1 vs 2
-        [[-1, 1],
-         [1, -1]],  # 1 vs 3
-        [[1, -1],
-         [-1, 1]],  # 2 vs 3
-    ])
-    u = PolyMatrixGame.calc_poly_matrix_utilities(n_players, n_actions, utilities)
-
-    utilities = np.array([
-        # player 1
-        [[[1 + -1, 1 + 1],      # HHH, HHT
-          [-1 + -1, -1 + 1]],   # HTH, HTT
-         [[-1 + 1, -1 + -1],    # THH, THT
-          [1 + 1, 1 + -1]]],    # TTH, TTT
-        # player 2
-        [[[-1 + 1, -1 + -1],    # HHH, HHT
-          [1 + -1, 1 + 1]],     # HTH, HTT
-         [[1 + 1, 1 + -1],      # THH, THT
-          [-1 + -1, -1 + 1]]],  # TTH, TTT
-        # player 3
-        [[[1 + -1, -1 + 1],     # HHH, HHT
-          [1 + 1, -1 + -1]],    # HTH, HTT
-         [[-1 + -1, 1 + 1],     # THH, THT
-          [-1 + 1, 1 + -1]]],   # TTH, TTT
-    ], dtype=float)
-    assert np.array_equal(u, utilities)
-    return PolyMatrixGame(utilities)
-
-def three_biased_matching_pennies():
-    n_players = 3
-    n_actions = [2, 2, 2]
-    utilities = np.array([
-        [[1 / 3, -2 / 3],
-        [-2 / 3, 1]],  # 1 vs 2
-        [[-2 / 3, 1 / 3],
-         [1/ 3, - 1]],  # 1 vs 3
-        [[1 / 3, -2 / 3],
-        [-2 / 3, 1]],  # 2 vs 3
-    ])
-    u = PolyMatrixGame.calc_poly_matrix_utilities(n_players, n_actions, utilities)
-    # assert np.array_equal(u, utilities)
-    return PolyMatrixGame(u)
-
 def three_biased_rps():
     n_players = 3
     n_actions = [3, 3, 3]
