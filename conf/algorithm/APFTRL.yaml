@@ -1,5 +1,5 @@
 alg_names: APFTRL
-mutation_rate: 0.1
+perturbation_strength: 0.1
 perturbation_divergence: reverse_kl
 update_slingshot_freq: #None
 defaults:

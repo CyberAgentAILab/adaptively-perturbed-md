@@ -9,12 +9,12 @@ class APFTRL(FTRL):
         num_actions,
         regularizer,
         learning_rate,
-        mutation_rate,
+        perturbation_strength,
         perturbation_divergence,
         update_slingshot_freq,
         **kwargs
     ):
-        self.mutation_rate = mutation_rate
+        self.perturbation_strength = perturbation_strength
         self.slingshot_strategy = np.ones(num_actions) / num_actions
         self.perturbation_divergence = perturbation_divergence
         self.update_slingshot_freq = update_slingshot_freq
@@ -24,7 +24,7 @@ class APFTRL(FTRL):
         alg_name = self.__class__.__name__
         if self.update_slingshot_freq is not None:
             alg_name += "_tsig{}".format(self.update_slingshot_freq)
-        alg_name += "_mu{}".format(self.mutation_rate)
+        alg_name += "_mu{}".format(self.perturbation_strength)
         alg_name += "_div{}".format(self.perturbation_divergence)
         alg_name += "_lr{}".format(self.learning_rate)
         alg_name += "_{}".format(self.regularizer)
@@ -33,33 +33,35 @@ class APFTRL(FTRL):
     def add_gradient(self, gradient):
         if self.perturbation_divergence == "reverse_kl":
             mutation = (
-                self.mutation_rate
+                self.perturbation_strength
                 * (self.slingshot_strategy - self.strategy)
                 / self.strategy
             )
         elif self.perturbation_divergence == "kl":
-            mutation = -self.mutation_rate * (
+            mutation = -self.perturbation_strength * (
                 np.log(self.strategy / self.slingshot_strategy) + 1
             )
         elif self.perturbation_divergence == "l2":
-            mutation = -self.mutation_rate * (self.strategy - self.slingshot_strategy)
+            mutation = -self.perturbation_strength * (
+                self.strategy - self.slingshot_strategy
+            )
         elif self.perturbation_divergence == "chi":
             mutation = (
-                -self.mutation_rate
+                -self.perturbation_strength
                 * 2
                 * (self.strategy - self.slingshot_strategy)
                 / self.slingshot_strategy
             )
         elif self.perturbation_divergence == "hellinger":
-            mutation = -self.mutation_rate * (
+            mutation = -self.perturbation_strength * (
                 1 - np.sqrt(self.slingshot_strategy / self.strategy)
             )
         elif self.perturbation_divergence == "js":
-            mutation = -self.mutation_rate * np.log(
+            mutation = -self.perturbation_strength * np.log(
                 2 * self.strategy / (self.strategy + self.slingshot_strategy)
             )
         elif self.perturbation_divergence == "sym_kl":
-            mutation = -self.mutation_rate * (
+            mutation = -self.perturbation_strength * (
                 np.log(self.strategy / self.slingshot_strategy)
                 + 1
                 - self.slingshot_strategy / self.strategy
@@ -77,7 +79,7 @@ class APFTRL(FTRL):
 
     def add_bandit_gradient(self, utility, strategy, action):
         mutation = (
-            self.mutation_rate
+            self.perturbation_strength
             * (self.slingshot_strategy - self.strategy)
             / self.strategy
         )
