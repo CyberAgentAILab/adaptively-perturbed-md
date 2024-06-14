@@ -31,10 +31,11 @@ def main(cfg):
     max_workers = int(mp.cpu_count() - 1) if cfg.max_workers == -1 else cfg.max_workers
     with ProcessPoolExecutor(max_workers=max_workers) as pool:
         arguments = [[trial_id, cfg, save_path, np.random.randint(0, 2 ** 32)] for trial_id in range(cfg.n_trials)]
-        pool.map(run_expriment, *tuple(zip(*arguments)))
+        pool.map(run_experiment, *tuple(zip(*arguments)))
     print('==========Finish experiment==========')
 
-def run_expriment(trial_id, cfg, save_path, seed):
+
+def run_experiment(trial_id, cfg, save_path, seed):
     print(f'==========Start trial {trial_id}==========')
     np.random.seed(seed)
     # initialize game
@@ -51,6 +52,7 @@ def run_expriment(trial_id, cfg, save_path, seed):
     print(f'==========Finish trial {trial_id}==========')
     df.to_csv(save_path + f'/results_{trial_id}.csv')
     return df
+
 
 if __name__ == '__main__':
     main()
